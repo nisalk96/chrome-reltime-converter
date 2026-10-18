@@ -3,6 +3,8 @@
   "name": "NK Currency",
   "short_name": "NK Currency",
   "version": "1.0.0",
+  "author": "nisalk",
+  "homepage_url": "https://nisalk.dev",
   "description": "Realtime page-wide price detection and conversion to your preferred currency.",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": ["https://api.frankfurter.dev/*"],

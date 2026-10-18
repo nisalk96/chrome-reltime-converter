@@ -2,6 +2,8 @@
 
 Chrome extension that detects prices on any page and shows conversions alongside them in your preferred currency (default: LKR).
 
+**Author:** [nisalk](https://nisalk.dev)
+
 > Project id: **nk-currency-converter**. If this folder is still named `chrome-reltime-converter`, rename it when Cursor is not locking the directory.
 
 ## Features

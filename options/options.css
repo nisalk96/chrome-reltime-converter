@@ -177,6 +177,62 @@ body {
   font-size: 0.85rem;
 }
 
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.choice {
+  display: block;
+  cursor: pointer;
+}
+
+.choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choice-body {
+  display: block;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.choice-title {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 650;
+  margin-bottom: 4px;
+}
+
+.choice-desc {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.choice-desc strong {
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.choice input:checked + .choice-body {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--bg));
+}
+
+.choice input:focus-visible + .choice-body {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .segmented {
   display: grid;
   grid-template-columns: 1fr 1fr;

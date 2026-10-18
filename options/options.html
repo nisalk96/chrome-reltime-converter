@@ -60,18 +60,26 @@
 
       <section class="card">
         <h2>When to convert</h2>
-        <p class="hint">
-          Full realtime converts every page as you browse. Click-triggered only
-          converts after you press Convert in the popup.
-        </p>
-        <div class="segmented" role="radiogroup" aria-label="Conversion mode">
-          <label class="seg">
+        <div class="choice-list" role="radiogroup" aria-label="Conversion mode">
+          <label class="choice">
             <input type="radio" name="convertMode" value="always" id="modeAlways" />
-            <span>Full realtime</span>
+            <span class="choice-body">
+              <span class="choice-title">Full realtime</span>
+              <span class="choice-desc"
+                >Automatically converts prices on every page as you browse — no
+                extra click needed.</span
+              >
+            </span>
           </label>
-          <label class="seg">
+          <label class="choice">
             <input type="radio" name="convertMode" value="click" id="modeClick" />
-            <span>Click-triggered</span>
+            <span class="choice-body">
+              <span class="choice-title">Click-triggered</span>
+              <span class="choice-desc"
+                >Pages stay unchanged until you open the popup and press
+                <strong>Convert this page</strong>.</span
+              >
+            </span>
           </label>
         </div>
       </section>

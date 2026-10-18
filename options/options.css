@@ -61,22 +61,120 @@ body {
   line-height: 1.4;
 }
 
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.field-label {
+  display: block;
+  margin-bottom: 6px;
   font-size: 0.8rem;
   color: var(--muted);
 }
 
-.field select {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
+/* Search + dropdown combobox */
+.combobox {
+  position: relative;
+}
+
+.combobox-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px 6px 12px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--bg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.combobox-control:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+.combobox-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
   color: var(--text);
   font-size: 0.95rem;
+  padding: 8px 0;
+}
+
+.combobox-input::placeholder {
+  color: var(--muted);
+}
+
+.combobox-toggle {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.combobox-toggle:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--panel) 80%, #fff);
+}
+
+.combobox.open .combobox-toggle {
+  color: var(--accent);
+  transform: rotate(180deg);
+}
+
+.combobox-list {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  max-height: 240px;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #0b1220;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+.combobox-option {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.combobox-option:hover,
+.combobox-option[aria-selected="true"],
+.combobox-option.active {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.combobox-option .code {
+  font-weight: 700;
+  min-width: 2.6em;
+  color: #5eead4;
+}
+
+.combobox-option .name {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.combobox-empty {
+  padding: 12px 10px;
+  color: var(--muted);
+  font-size: 0.85rem;
 }
 
 .segmented {

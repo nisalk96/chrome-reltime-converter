@@ -15,10 +15,47 @@
 
       <section class="card">
         <h2>Preferred currency</h2>
-        <label class="field" for="currency">
-          <span>Convert prices into</span>
-          <select id="currency"></select>
-        </label>
+        <p class="hint">Search by code or name, then pick from the list.</p>
+
+        <div class="combobox" id="currencyCombobox">
+          <label class="field-label" for="currencySearch">Convert prices into</label>
+          <div class="combobox-control">
+            <input
+              type="text"
+              id="currencySearch"
+              class="combobox-input"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="currencyList"
+              aria-haspopup="listbox"
+              placeholder="Search currency…"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button
+              type="button"
+              class="combobox-toggle"
+              id="currencyToggle"
+              aria-label="Open currency list"
+              tabindex="-1"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M7 10l5 5 5-5H7z"
+                />
+              </svg>
+            </button>
+          </div>
+          <ul
+            id="currencyList"
+            class="combobox-list"
+            role="listbox"
+            hidden
+          ></ul>
+          <input type="hidden" id="currency" value="LKR" />
+        </div>
       </section>
 
       <section class="card">

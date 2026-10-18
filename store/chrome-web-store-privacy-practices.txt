@@ -1,0 +1,83 @@
+NK Currency — Chrome Web Store “Privacy practices” answers
+Paste these into the Privacy practices tab, then Save Draft.
+
+Also complete Dashboard → Account / Settings:
+• Add publisher contact email
+• Verify that email (check inbox for Google’s verification link)
+
+
+═══════════════════════════════════════
+1) SINGLE PURPOSE DESCRIPTION (required)
+═══════════════════════════════════════
+
+Detects prices on web pages and converts them to the user’s preferred currency using public exchange rates from Frankfurter.
+
+
+═══════════════════════════════════════
+2) PERMISSION JUSTIFICATIONS (required)
+═══════════════════════════════════════
+
+--- storage ---
+Used only to save the user’s preferences on their device (preferred currency, conversion mode, display options) and to cache exchange rates temporarily so the extension does not repeatedly call the rate API. Settings and cache never leave the user’s browser for advertising or sale.
+
+--- activeTab ---
+Used so the user can trigger conversion on the page they are viewing (for example when they click “Convert this page” in the popup). This lets the extension read price text on the active tab only when conversion is requested or enabled, and show converted amounts on that page.
+
+--- scripting ---
+Used to run the content script that finds currency amounts in page text and inserts converted values next to (or instead of) those amounts. Scripting is limited to implementing the currency-conversion feature; it does not inject ads, trackers, or unrelated code.
+
+--- Host permission: https://api.frankfurter.dev/* ---
+Required to fetch public mid-market exchange rates from the Frankfurter API (https://frankfurter.dev / https://api.frankfurter.dev). The extension only requests rate data needed for currency conversion. No browsing history is uploaded to the developer. No other hosts are contacted for conversion.
+
+
+═══════════════════════════════════════
+3) REMOTE CODE USE (required)
+═══════════════════════════════════════
+
+Select: No, I am not using remote code.
+
+Justification / explanation (if a text box is shown):
+This extension does not download or execute remote JavaScript. All extension logic ships inside the package (popup, options, background service worker, and content scripts). The only network calls are HTTPS requests to https://api.frankfurter.dev for JSON exchange-rate data, which is used as data—not executed as code.
+
+
+═══════════════════════════════════════
+4) DATA USAGE / CERTIFICATION (required)
+═══════════════════════════════════════
+
+In the data collection checkboxes:
+• If asked what user data you collect: typically select that you do NOT collect user data for sale/ads, or only “Personally identifiable information” = none / not collected, unless the form forces a category for locally stored settings.
+• Honest summary: the extension stores preferences and rate cache locally with chrome.storage; it does not send personal data to the developer.
+
+Certify / check the Developer Program Policies compliance boxes (all that apply), including limited use of user data.
+
+Privacy policy URL (required on many listings):
+https://nisalk.dev/privacy
+
+Full policy source also lives in: store/privacy-policy-draft.md
+(Portfolio page: portfolio-2026/src/app/privacy/page.tsx)
+
+
+═══════════════════════════════════════
+5) CONTACT EMAIL (Account Settings — not Privacy tab)
+═══════════════════════════════════════
+
+1. Open Chrome Web Store Developer Dashboard → Account / Settings (publisher settings).
+2. Enter a contact email you can access.
+3. Click verify / confirm and complete the email verification link from Google.
+4. Return to the item → Privacy practices → Save Draft → Submit for review.
+
+
+═══════════════════════════════════════
+QUICK CHECKLIST BEFORE “SUBMIT FOR REVIEW”
+═══════════════════════════════════════
+
+[ ] Single purpose description pasted
+[ ] storage justification pasted
+[ ] activeTab justification pasted
+[ ] scripting justification pasted
+[ ] host permission (api.frankfurter.dev) justification pasted
+[ ] Remote code = No (+ short explanation if asked)
+[ ] Data usage certified / policy boxes checked
+[ ] Privacy policy URL filled
+[ ] Publisher contact email added AND verified
+[ ] Save Draft

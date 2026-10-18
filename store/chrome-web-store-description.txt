@@ -1,0 +1,170 @@
+NK Currency — Realtime Page Price Converter
+
+Convert prices on any webpage into your preferred currency — instantly, privately, and transparently.
+
+NK Currency is a lightweight Chrome extension that finds prices with currency symbols or codes on the page you are viewing and shows the converted amount in the currency you choose (default: Sri Lankan Rupee / LKR). It is built for shoppers, freelancers, travelers, and anyone comparing prices across sites and currencies.
+
+
+═══════════════════════════════════════
+OPEN SOURCE & TRANSPARENT
+═══════════════════════════════════════
+
+• Source code is publicly available on GitHub:
+  https://github.com/nisalk96/chrome-reltime-converter
+
+• Author: nisalk — https://nisalk.dev
+
+• You can review every line of code before installing, fork the project, or report issues on GitHub.
+
+• NK Currency does NOT include malware, spyware, adware, trackers, crypto miners, or hidden background uploaders.
+
+• NK Currency does NOT sell your data, build advertising profiles, or inject third-party analytics SDKs.
+
+
+═══════════════════════════════════════
+WHAT IT DOES
+═══════════════════════════════════════
+
+1. Detects prices on the page (for example $99, €49.99, £20, USD 45, 10 EUR).
+2. Converts them using public mid-market exchange rates from Frankfurter.
+3. Shows the result beside the original price (or replaces it, if you prefer).
+4. Works as you browse: convert only when you click, or enable full realtime conversion.
+
+
+═══════════════════════════════════════
+KEY FEATURES
+═══════════════════════════════════════
+
+PREFERRED CURRENCY
+• Choose from 160+ currencies supported by Frankfurter (including LKR, USD, EUR, GBP, INR, and many more).
+• Searchable currency picker in Settings — find a currency by code or name.
+
+WHEN TO CONVERT
+• Full realtime — automatically converts visible prices as you browse.
+• Click-triggered — pages stay unchanged until you press “Convert this page” in the popup.
+
+DISPLAY OPTIONS
+• Beside original — keep the original price and append ≈ converted amount.
+• Replace original — show only the converted value.
+• Show currency symbols — toggle symbol-style formatting (where available) vs plain code/amount.
+• Full price — show the calculated converted total.
+• Rate only — show the exchange rate style (for example 1 USD = …).
+
+SMART & LIGHTWEIGHT
+• Converts only prices that are visible (or near the viewport) to reduce unnecessary work and API use.
+• Caches exchange rates locally for about 6 hours to avoid repeated network calls.
+• Watches dynamic pages (infinite scroll / SPA updates) after conversion is active.
+• Clear conversions anytime from the popup.
+
+DESIGN
+• Clean teal branding consistent with the NK Currency icon.
+• Converted amounts use readable dark-green text on light pages (and a lighter teal on dark backgrounds).
+
+
+═══════════════════════════════════════
+EXCHANGE RATES — FRANKFURTER.DEV
+═══════════════════════════════════════
+
+NK Currency uses the free, open Frankfurter exchange-rate API:
+
+• Website: https://frankfurter.dev
+• API host used by this extension: https://api.frankfurter.dev
+
+What this means in practice:
+• No API key is required for Frankfurter’s public API.
+• Rates are mid-market reference rates (typically updated about once per day — not tick-by-tick trading quotes).
+• Suitable for shopping comparisons, budgeting, and everyday browsing — not for live forex trading or financial advice.
+• The extension requests only exchange-rate data needed for conversion (for example rate pairs such as USD→LKR).
+
+We do not proxy your browsing history through our own servers. Rate requests go from your browser (via the extension service worker) to Frankfurter’s public API.
+
+
+═══════════════════════════════════════
+PRIVACY — WHAT WE COLLECT AND WHAT WE DON’T
+═══════════════════════════════════════
+
+Designed to be privacy-first:
+
+DOES NOT collect
+• Your name, email, or account identity for NK Currency accounts (there are none).
+• Browsing history lists sent to the developer.
+• Keystrokes, passwords, screenshots, or clipboard contents for exfiltration.
+• Advertising IDs or third-party tracking pixels.
+
+MAY store locally on your device (Chrome storage)
+• Preferred currency
+• Conversion mode and display preferences
+• Cached exchange rates (temporary, to reduce API calls)
+
+Page access
+• The extension reads visible text on pages only to detect price patterns and display conversions when you enable conversion.
+• It does not rewrite site scripts for malicious purposes and does not inject unrelated ads.
+
+For the latest privacy details, see the project README / privacy policy linked from the listing and the GitHub repository.
+
+
+═══════════════════════════════════════
+PERMISSIONS — WHY THEY ARE NEEDED
+═══════════════════════════════════════
+
+• storage — Save your settings and cache rates on your device.
+• activeTab / scripting / content scripts — Detect prices in page text and show conversions when enabled.
+• Host permission for https://api.frankfurter.dev/* — Fetch public exchange rates only.
+
+NK Currency does not request access to your Google account, camera, microphone, or downloads.
+
+
+═══════════════════════════════════════
+HOW TO USE
+═══════════════════════════════════════
+
+1. Click the NK Currency icon in the toolbar.
+2. Pick your preferred currency (or open Settings for full options).
+3. If you use click-triggered mode, press “Convert this page”.
+4. Or enable Full realtime in Settings so conversions happen automatically as you browse.
+5. Use “Clear conversions” to restore original page text.
+
+Settings include preferred currency search, when-to-convert mode, beside/replace display, symbols toggle, and full price vs rate-only.
+
+
+═══════════════════════════════════════
+LIMITATIONS (HONEST)
+═══════════════════════════════════════
+
+• Not every number on a page is a price; detection uses currency symbols and ISO codes and may miss unusual formats.
+• Some sites render prices in images or canvases — those cannot be read as text.
+• Frankfurter rates are not live trading ticks; values are approximate for everyday use.
+• Restricted Chrome pages (for example chrome:// pages and the Chrome Web Store itself) cannot run content scripts.
+• Yen/dollar symbol ambiguity and shared symbols across regions may occasionally map to a default currency (for example $ → USD in v1).
+
+
+═══════════════════════════════════════
+SUPPORT & DEVELOPMENT
+═══════════════════════════════════════
+
+• GitHub repository (source, issues, contributions):
+  https://github.com/nisalk96/chrome-reltime-converter
+
+• Author site: https://nisalk.dev
+
+• Exchange-rate provider: https://frankfurter.dev
+
+If something looks wrong on a specific site, please open a GitHub issue with the page URL and a screenshot (no passwords or private data).
+
+
+═══════════════════════════════════════
+DISCLAIMER
+═══════════════════════════════════════
+
+NK Currency is provided as-is for convenience. Converted amounts are estimates based on third-party public rates from Frankfurter and may differ from bank, card, or checkout rates (fees, spread, and timing). This extension is not a bank, broker, or financial advisor.
+
+
+═══════════════════════════════════════
+SUMMARY
+═══════════════════════════════════════
+
+NK Currency helps you understand foreign prices in your currency — with open source code, no malware/spyware, local-only settings, and transparent use of Frankfurter’s public exchange-rate API.
+
+GitHub: https://github.com/nisalk96/chrome-reltime-converter
+Author: https://nisalk.dev
+Rates: https://frankfurter.dev

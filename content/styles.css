@@ -1,0 +1,18 @@
+.nkc-converted {
+  white-space: inherit;
+}
+
+.nkc-approx {
+  margin-left: 0.25em;
+  opacity: 0.72;
+  font-weight: 500;
+  color: inherit;
+  filter: brightness(0.85);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nkc-approx {
+    filter: brightness(1.15);
+    opacity: 0.8;
+  }
+}

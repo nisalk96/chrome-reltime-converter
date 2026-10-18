@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NK Currency</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>NK Currency</h1>
+      <p class="subtitle">Realtime page price converter</p>
+    </header>
+
+    <label class="field" for="currency">
+      <span>Preferred currency</span>
+      <select id="currency" aria-label="Preferred currency"></select>
+    </label>
+
+    <label class="toggle" for="realtime">
+      <span>Realtime</span>
+      <input type="checkbox" id="realtime" />
+      <span class="switch" aria-hidden="true"></span>
+    </label>
+
+    <p id="status" class="status" role="status"></p>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

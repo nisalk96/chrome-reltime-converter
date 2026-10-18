@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "NK Currency",
+  "short_name": "NK Currency",
+  "version": "1.0.0",
+  "description": "Realtime page-wide price detection and conversion to your preferred currency.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["https://api.frankfurter.dev/*"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "NK Currency",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "content/detector.js",
+        "content/converter.js",
+        "content/content.js"
+      ],
+      "css": ["content/styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

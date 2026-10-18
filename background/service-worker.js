@@ -14,12 +14,27 @@ const FALLBACK_CURRENCIES = [
 ];
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get(["preferredCurrency", "realtimeEnabled"], (result) => {
-    const updates = {};
-    if (result.preferredCurrency == null) updates.preferredCurrency = "LKR";
-    if (result.realtimeEnabled == null) updates.realtimeEnabled = false;
-    if (Object.keys(updates).length) chrome.storage.sync.set(updates);
-  });
+  chrome.storage.sync.get(
+    [
+      "preferredCurrency",
+      "autoConvert",
+      "realtimeEnabled",
+      "displayMode",
+      "showSymbols",
+      "valueMode",
+    ],
+    (result) => {
+      const updates = {};
+      if (result.preferredCurrency == null) updates.preferredCurrency = "LKR";
+      if (result.autoConvert == null) {
+        updates.autoConvert = Boolean(result.realtimeEnabled);
+      }
+      if (result.displayMode == null) updates.displayMode = "alongside";
+      if (result.showSymbols == null) updates.showSymbols = true;
+      if (result.valueMode == null) updates.valueMode = "fullPrice";
+      if (Object.keys(updates).length) chrome.storage.sync.set(updates);
+    }
+  );
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {

@@ -1,6 +1,9 @@
 const currencySelect = document.getElementById("currency");
-const realtimeToggle = document.getElementById("realtime");
+const convertBtn = document.getElementById("convertBtn");
+const clearBtn = document.getElementById("clearBtn");
 const statusEl = document.getElementById("status");
+const modeHint = document.getElementById("modeHint");
+const openSettings = document.getElementById("openSettings");
 
 const FALLBACK = [
   { iso_code: "LKR", name: "Sri Lankan Rupee" },
@@ -9,6 +12,8 @@ const FALLBACK = [
   { iso_code: "GBP", name: "British Pound" },
   { iso_code: "INR", name: "Indian Rupee" },
 ];
+
+let currentSettings = NKCSettings.DEFAULT_SETTINGS;
 
 function setStatus(text, kind = "") {
   statusEl.textContent = text || "";
@@ -24,7 +29,21 @@ function fillCurrencies(list, selected) {
     currencySelect.appendChild(opt);
   }
   const codes = list.map((c) => c.iso_code);
-  currencySelect.value = codes.includes(selected) ? selected : codes.includes("LKR") ? "LKR" : codes[0];
+  currencySelect.value = codes.includes(selected)
+    ? selected
+    : codes.includes("LKR")
+      ? "LKR"
+      : codes[0];
+}
+
+function updateModeUI() {
+  if (currentSettings.autoConvert) {
+    modeHint.textContent = "Full realtime is on — pages convert automatically.";
+    convertBtn.textContent = "Re-scan this page";
+  } else {
+    modeHint.textContent = "Click-triggered — convert the current page when you want.";
+    convertBtn.textContent = "Convert this page";
+  }
 }
 
 async function loadCurrencies(preferred) {
@@ -49,46 +68,65 @@ async function loadCurrencies(preferred) {
   });
 }
 
-function notifyActiveTab(payload) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const tab = tabs[0];
-    if (!tab?.id) return;
-    chrome.tabs.sendMessage(tab.id, payload, () => {
-      void chrome.runtime.lastError;
+function sendToActiveTab(payload) {
+  return new Promise((resolve) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs[0];
+      if (!tab?.id) {
+        resolve({ ok: false, error: "No active tab" });
+        return;
+      }
+      chrome.tabs.sendMessage(tab.id, payload, (response) => {
+        if (chrome.runtime.lastError) {
+          resolve({ ok: false, error: chrome.runtime.lastError.message });
+          return;
+        }
+        resolve(response || { ok: true });
+      });
     });
   });
 }
 
+async function persistCurrency() {
+  const preferredCurrency = currencySelect.value;
+  currentSettings = { ...currentSettings, preferredCurrency };
+  await chrome.storage.sync.set({ preferredCurrency });
+  await sendToActiveTab({
+    type: "NKC_SETTINGS_CHANGED",
+    ...currentSettings,
+  });
+  setStatus(`Preferred: ${preferredCurrency}`, "ok");
+}
+
 async function init() {
-  const stored = await chrome.storage.sync.get([
-    "preferredCurrency",
-    "realtimeEnabled",
-  ]);
-  const preferred = stored.preferredCurrency || "LKR";
-  realtimeToggle.checked = Boolean(stored.realtimeEnabled);
+  currentSettings = await NKCSettings.loadSettings();
+  updateModeUI();
+  await loadCurrencies(currentSettings.preferredCurrency);
 
-  await loadCurrencies(preferred);
+  currencySelect.addEventListener("change", persistCurrency);
 
-  currencySelect.addEventListener("change", async () => {
-    const preferredCurrency = currencySelect.value;
-    await chrome.storage.sync.set({ preferredCurrency });
-    notifyActiveTab({
-      type: "NKC_SETTINGS_CHANGED",
-      preferredCurrency,
-      realtimeEnabled: realtimeToggle.checked,
-    });
-    setStatus(`Preferred: ${preferredCurrency}`, "ok");
+  convertBtn.addEventListener("click", async () => {
+    setStatus("Converting…");
+    const result = await sendToActiveTab({ type: "NKC_CONVERT_NOW" });
+    if (!result.ok) {
+      setStatus(result.error || "Could not convert this page", "error");
+      return;
+    }
+    setStatus("Page converted", "ok");
   });
 
-  realtimeToggle.addEventListener("change", async () => {
-    const realtimeEnabled = realtimeToggle.checked;
-    await chrome.storage.sync.set({ realtimeEnabled });
-    notifyActiveTab({
-      type: "NKC_SETTINGS_CHANGED",
-      preferredCurrency: currencySelect.value,
-      realtimeEnabled,
-    });
-    setStatus(realtimeEnabled ? "Realtime on" : "Realtime off", "ok");
+  clearBtn.addEventListener("click", async () => {
+    const result = await sendToActiveTab({ type: "NKC_CLEAR" });
+    if (!result.ok) {
+      setStatus(result.error || "Could not clear", "error");
+      return;
+    }
+    setStatus("Conversions cleared", "ok");
+  });
+
+  openSettings.addEventListener("click", (e) => {
+    e.preventDefault();
+    chrome.runtime.openOptionsPage();
   });
 }
 

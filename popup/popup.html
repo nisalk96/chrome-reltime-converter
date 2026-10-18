@@ -17,18 +17,22 @@
       <select id="currency" aria-label="Preferred currency"></select>
     </label>
 
-    <label class="toggle" for="realtime">
-      <span>Realtime</span>
-      <input type="checkbox" id="realtime" />
-      <span class="switch" aria-hidden="true"></span>
-    </label>
+    <p id="modeHint" class="mode-hint"></p>
+
+    <button type="button" id="convertBtn" class="btn primary">Convert this page</button>
+    <button type="button" id="clearBtn" class="btn ghost">Clear conversions</button>
 
     <p id="status" class="status" role="status"></p>
+
+    <nav class="nav">
+      <a href="#" id="openSettings">Settings</a>
+    </nav>
 
     <footer class="footer">
       <a href="https://nisalk.dev" target="_blank" rel="noopener noreferrer">nisalk · nisalk.dev</a>
     </footer>
 
+    <script src="../shared/settings.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

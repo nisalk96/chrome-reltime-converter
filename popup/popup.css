@@ -57,68 +57,64 @@ body {
   font-size: 0.9rem;
 }
 
-.toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.mode-hint {
+  margin: 0 0 12px;
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
   padding: 10px 12px;
   border-radius: 10px;
-  background: var(--panel);
   border: 1px solid var(--border);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 650;
   cursor: pointer;
-  user-select: none;
 }
 
-.toggle input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.switch {
-  position: relative;
-  width: 42px;
-  height: 24px;
-  border-radius: 999px;
-  background: var(--border);
-  flex-shrink: 0;
-  transition: background 0.2s ease;
-}
-
-.switch::after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #fff;
-  transition: transform 0.2s ease;
-}
-
-.toggle input:checked + .switch {
+.btn.primary {
   background: var(--accent);
+  border-color: var(--accent-dim);
+  color: #fff;
 }
 
-.toggle input:checked + .switch::after {
-  transform: translateX(18px);
+.btn.primary:hover {
+  filter: brightness(1.08);
 }
 
-.toggle input:focus-visible + .switch {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+.btn.ghost {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.btn.ghost:hover {
+  border-color: var(--accent);
 }
 
 .status {
-  margin: 12px 0 0;
+  margin: 8px 0 0;
   min-height: 1.2em;
   font-size: 0.75rem;
   color: var(--muted);
+}
+
+.nav {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.nav a {
+  color: #5eead4;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  text-decoration: underline;
 }
 
 .status.error {

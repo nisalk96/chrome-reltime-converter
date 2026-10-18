@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NK Currency — Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="header">
+        <h1>NK Currency</h1>
+        <p class="subtitle">Settings</p>
+      </header>
+
+      <section class="card">
+        <h2>Preferred currency</h2>
+        <label class="field" for="currency">
+          <span>Convert prices into</span>
+          <select id="currency"></select>
+        </label>
+      </section>
+
+      <section class="card">
+        <h2>When to convert</h2>
+        <p class="hint">
+          Full realtime converts every page as you browse. Click-triggered only
+          converts after you press Convert in the popup.
+        </p>
+        <div class="segmented" role="radiogroup" aria-label="Conversion mode">
+          <label class="seg">
+            <input type="radio" name="convertMode" value="always" id="modeAlways" />
+            <span>Full realtime</span>
+          </label>
+          <label class="seg">
+            <input type="radio" name="convertMode" value="click" id="modeClick" />
+            <span>Click-triggered</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Display</h2>
+        <div class="segmented" role="radiogroup" aria-label="Display mode">
+          <label class="seg">
+            <input type="radio" name="displayMode" value="alongside" id="displayAlongside" />
+            <span>Beside original</span>
+          </label>
+          <label class="seg">
+            <input type="radio" name="displayMode" value="replace" id="displayReplace" />
+            <span>Replace original</span>
+          </label>
+        </div>
+
+        <label class="toggle" for="showSymbols">
+          <span>
+            Show currency symbols
+            <small>e.g. $ / Rs instead of USD / LKR only</small>
+          </span>
+          <input type="checkbox" id="showSymbols" />
+          <span class="switch" aria-hidden="true"></span>
+        </label>
+
+        <div class="segmented" role="radiogroup" aria-label="Value mode">
+          <label class="seg">
+            <input type="radio" name="valueMode" value="fullPrice" id="valueFull" />
+            <span>Full price</span>
+          </label>
+          <label class="seg">
+            <input type="radio" name="valueMode" value="rateOnly" id="valueRate" />
+            <span>Rate only</span>
+          </label>
+        </div>
+        <p class="hint" id="preview">Preview: $10 ≈ Rs 3,307.40</p>
+      </section>
+
+      <p id="status" class="status" role="status"></p>
+
+      <footer class="footer">
+        <a href="https://nisalk.dev" target="_blank" rel="noopener noreferrer"
+          >nisalk · nisalk.dev</a
+        >
+      </footer>
+    </main>
+
+    <script src="../shared/settings.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

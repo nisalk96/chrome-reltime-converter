@@ -1,0 +1,19 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local tooling (if reintroduced)
+node_modules/
+package.json
+package-lock.json
+test/
+
+# Chrome extension packaging
+*.crx
+*.pem
+*.zip

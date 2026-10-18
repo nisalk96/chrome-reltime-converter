@@ -1,11 +1,20 @@
 (() => {
   const STATE = {
     preferredCurrency: "LKR",
-    realtimeEnabled: false,
+    autoConvert: false,
+    displayMode: "alongside",
+    showSymbols: true,
+    valueMode: "fullPrice",
+    /** click-triggered: active for this page session after Convert */
+    sessionActive: false,
     converting: false,
     observer: null,
     debounceTimer: null,
   };
+
+  function isActive() {
+    return STATE.autoConvert || STATE.sessionActive;
+  }
 
   function restoreAll() {
     document.querySelectorAll(".nkc-converted").forEach((el) => {
@@ -22,13 +31,18 @@
     span.setAttribute("data-original", originalText);
     span.setAttribute("title", `Converted to ${STATE.preferredCurrency}`);
 
-    const base = document.createTextNode(originalText + " ");
-    const approx = document.createElement("span");
-    approx.className = "nkc-approx";
-    approx.textContent = `≈ ${convertedLabel}`;
-
-    span.appendChild(base);
-    span.appendChild(approx);
+    if (STATE.displayMode === "replace") {
+      const approx = document.createElement("span");
+      approx.className = "nkc-approx nkc-replaced";
+      approx.textContent = convertedLabel;
+      span.appendChild(approx);
+    } else {
+      span.appendChild(document.createTextNode(originalText + " "));
+      const approx = document.createElement("span");
+      approx.className = "nkc-approx";
+      approx.textContent = `≈ ${convertedLabel}`;
+      span.appendChild(approx);
+    }
     return span;
   }
 
@@ -52,14 +66,18 @@
 
       let convertedLabel;
       try {
-        const converted = await window.NKCConverter.convertAmount(
-          match.amount,
-          match.currency,
-          target
-        );
-        convertedLabel = window.NKCConverter.formatConverted(converted, target);
+        const rate = await window.NKCConverter.getRate(match.currency, target);
+        const converted = match.amount * rate;
+        convertedLabel = window.NKCConverter.formatConvertedLabel({
+          amount: match.amount,
+          from: match.currency,
+          to: target,
+          rate,
+          converted,
+          showSymbols: STATE.showSymbols,
+          valueMode: STATE.valueMode,
+        });
       } catch {
-        // Leave this match as plain text on failure
         fragments.push(
           document.createTextNode(text.slice(match.index, match.index + match.length))
         );
@@ -86,16 +104,14 @@
   }
 
   async function scan(root = document.body) {
-    if (!STATE.realtimeEnabled || !root || STATE.converting) return;
+    if (!isActive() || !root || STATE.converting) return;
     STATE.converting = true;
     try {
       const nodes = window.NKCDetector.collectTextNodes(root);
-      // Process in small batches to keep UI responsive
       const batchSize = 40;
       for (let i = 0; i < nodes.length; i += batchSize) {
-        if (!STATE.realtimeEnabled) break;
+        if (!isActive()) break;
         const batch = nodes.slice(i, i + batchSize);
-        // Re-check nodes still in DOM
         await Promise.all(
           batch
             .filter((n) => n.isConnected && !n.parentElement?.closest?.(".nkc-converted"))
@@ -117,7 +133,7 @@
   function startObserver() {
     if (STATE.observer || !document.body) return;
     STATE.observer = new MutationObserver((mutations) => {
-      if (!STATE.realtimeEnabled) return;
+      if (!isActive()) return;
       let shouldScan = false;
       for (const m of mutations) {
         if (m.type === "characterData") {
@@ -158,60 +174,130 @@
     }
   }
 
-  async function applySettings({ preferredCurrency, realtimeEnabled }) {
-    const currencyChanged =
-      preferredCurrency && preferredCurrency !== STATE.preferredCurrency;
-    const enabledChanged = realtimeEnabled !== STATE.realtimeEnabled;
+  function settingsFingerprint(s) {
+    return [
+      s.preferredCurrency,
+      s.autoConvert,
+      s.displayMode,
+      s.showSymbols,
+      s.valueMode,
+    ].join("|");
+  }
 
-    if (preferredCurrency) STATE.preferredCurrency = preferredCurrency;
-    STATE.realtimeEnabled = Boolean(realtimeEnabled);
+  async function applySettings(raw, { forceScan = false } = {}) {
+    const next = window.NKCSettings
+      ? window.NKCSettings.normalizeSettings(raw)
+      : {
+          preferredCurrency: raw.preferredCurrency || "LKR",
+          autoConvert: Boolean(raw.autoConvert ?? raw.realtimeEnabled),
+          displayMode: raw.displayMode === "replace" ? "replace" : "alongside",
+          showSymbols: raw.showSymbols != null ? Boolean(raw.showSymbols) : true,
+          valueMode: raw.valueMode === "rateOnly" ? "rateOnly" : "fullPrice",
+        };
 
-    if (currencyChanged) {
+    const prevFp = settingsFingerprint(STATE);
+    const nextFp = settingsFingerprint(next);
+    const changed = prevFp !== nextFp;
+
+    if (changed) {
       window.NKCConverter?.clearMemoryCache?.();
-      restoreAll();
     }
 
-    if (!STATE.realtimeEnabled) {
+    Object.assign(STATE, next);
+
+    // Switching to click mode clears any prior auto session unless forceScan
+    if (!STATE.autoConvert && !forceScan) {
+      STATE.sessionActive = false;
       stopObserver();
       restoreAll();
       return;
     }
 
-    if (enabledChanged || currencyChanged) {
+    if (STATE.autoConvert) {
+      STATE.sessionActive = false;
+    }
+
+    if (changed || forceScan) {
       restoreAll();
+    }
+
+    if (!isActive()) {
+      stopObserver();
+      return;
     }
 
     startObserver();
     await scan(document.body);
   }
 
+  async function convertNow() {
+    STATE.sessionActive = true;
+    restoreAll();
+    startObserver();
+    await scan(document.body);
+  }
+
   async function loadFromStorage() {
+    if (window.NKCSettings?.loadSettings) {
+      return window.NKCSettings.loadSettings();
+    }
     return new Promise((resolve) => {
-      chrome.storage.sync.get(["preferredCurrency", "realtimeEnabled"], (result) => {
-        resolve({
-          preferredCurrency: result.preferredCurrency || "LKR",
-          realtimeEnabled: Boolean(result.realtimeEnabled),
-        });
-      });
+      chrome.storage.sync.get(
+        [
+          "preferredCurrency",
+          "autoConvert",
+          "realtimeEnabled",
+          "displayMode",
+          "showSymbols",
+          "valueMode",
+        ],
+        (result) => {
+          resolve({
+            preferredCurrency: result.preferredCurrency || "LKR",
+            autoConvert: Boolean(result.autoConvert ?? result.realtimeEnabled),
+            displayMode: result.displayMode === "replace" ? "replace" : "alongside",
+            showSymbols: result.showSymbols != null ? Boolean(result.showSymbols) : true,
+            valueMode: result.valueMode === "rateOnly" ? "rateOnly" : "fullPrice",
+          });
+        }
+      );
     });
   }
 
-  chrome.runtime.onMessage.addListener((message) => {
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message?.type === "NKC_SETTINGS_CHANGED") {
-      applySettings({
-        preferredCurrency: message.preferredCurrency,
-        realtimeEnabled: message.realtimeEnabled,
-      });
+      applySettings(message).then(() => sendResponse({ ok: true }));
+      return true;
     }
+    if (message?.type === "NKC_CONVERT_NOW") {
+      convertNow()
+        .then(() => sendResponse({ ok: true }))
+        .catch((error) => sendResponse({ ok: false, error: String(error) }));
+      return true;
+    }
+    if (message?.type === "NKC_CLEAR") {
+      STATE.sessionActive = false;
+      stopObserver();
+      restoreAll();
+      sendResponse({ ok: true });
+      return false;
+    }
+    return false;
   });
 
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== "sync") return;
-    const preferredCurrency =
-      changes.preferredCurrency?.newValue ?? STATE.preferredCurrency;
-    const realtimeEnabled =
-      changes.realtimeEnabled?.newValue ?? STATE.realtimeEnabled;
-    applySettings({ preferredCurrency, realtimeEnabled });
+    const keys = [
+      "preferredCurrency",
+      "autoConvert",
+      "realtimeEnabled",
+      "displayMode",
+      "showSymbols",
+      "valueMode",
+    ];
+    if (!keys.some((k) => k in changes)) return;
+
+    loadFromStorage().then((settings) => applySettings(settings));
   });
 
   loadFromStorage().then((settings) => applySettings(settings));

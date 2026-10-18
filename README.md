@@ -8,9 +8,9 @@ Chrome extension that detects prices on any page and shows conversions alongside
 
 ## Features
 
-- **Realtime** toggle — scan the entire page for prices with symbols (`$`, `€`, `£`, …) or ISO codes (`USD 10`)
+- **Settings page** — full realtime (always convert) or click-triggered Convert
+- Display: beside original or replace; symbols on/off; full price or rate only
 - Convert via [Frankfurter](https://frankfurter.dev/) (free, no API key)
-- Display format: `$10 ≈ Rs 3,307.40`
 - Watches dynamic page updates (infinite scroll / SPAs)
 - Preferred currency list loaded from Frankfurter (~165 currencies)
 
@@ -19,15 +19,18 @@ Chrome extension that detects prices on any page and shows conversions alongside
 1. Open `chrome://extensions`
 2. Enable **Developer mode**
 3. Click **Load unpacked** and select this project folder
-4. Open the **NK Currency** popup, pick a currency, enable **Realtime**
+4. Open **Settings** (or popup → Settings), pick currency and conversion mode
+5. Use **Convert this page** in the popup, or turn on **Full realtime**
 
 ## Project layout
 
 ```
 manifest.json
 popup/
+options/
 background/
 content/
+shared/
 icons/
 ```
 

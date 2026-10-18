@@ -8,6 +8,10 @@
   "description": "Realtime page-wide price detection and conversion to your preferred currency.",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": ["https://api.frankfurter.dev/*"],
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
   "action": {
     "default_popup": "popup/popup.html",
     "default_title": "NK Currency",
@@ -29,6 +33,7 @@
     {
       "matches": ["<all_urls>"],
       "js": [
+        "shared/settings.js",
         "content/detector.js",
         "content/converter.js",
         "content/content.js"

@@ -1,16 +1,39 @@
 (() => {
   const rateCache = new Map(); // `${from}:${to}` -> rate
 
-  function formatConverted(amount, currency) {
-    try {
-      return new Intl.NumberFormat(undefined, {
-        style: "currency",
-        currency,
-        maximumFractionDigits: 2,
-      }).format(amount);
-    } catch {
-      return `${amount.toFixed(2)} ${currency}`;
+  function formatMoney(amount, currency, showSymbols) {
+    if (showSymbols) {
+      try {
+        return new Intl.NumberFormat(undefined, {
+          style: "currency",
+          currency,
+          maximumFractionDigits: 2,
+        }).format(amount);
+      } catch {
+        /* fall through */
+      }
     }
+    const n = Number(amount);
+    const fixed = Number.isFinite(n) ? n.toFixed(2) : String(amount);
+    return `${fixed} ${currency}`;
+  }
+
+  function formatConvertedLabel({
+    amount,
+    from,
+    to,
+    rate,
+    converted,
+    showSymbols = true,
+    valueMode = "fullPrice",
+  }) {
+    if (valueMode === "rateOnly") {
+      const rateLabel = formatMoney(rate, to, showSymbols);
+      return showSymbols
+        ? `1 ${from} = ${rateLabel}`
+        : `1 ${from} = ${Number(rate).toFixed(4)} ${to}`;
+    }
+    return formatMoney(converted != null ? converted : amount * rate, to, showSymbols);
   }
 
   function sendMessage(message) {
@@ -54,7 +77,8 @@
   window.NKCConverter = {
     convertAmount,
     getRate,
-    formatConverted,
+    formatMoney,
+    formatConvertedLabel,
     clearMemoryCache,
   };
 })();

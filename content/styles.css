@@ -10,6 +10,12 @@
   filter: brightness(0.85);
 }
 
+.nkc-approx.nkc-replaced {
+  margin-left: 0;
+  opacity: 1;
+  filter: none;
+}
+
 @media (prefers-color-scheme: dark) {
   .nkc-approx {
     filter: brightness(1.15);

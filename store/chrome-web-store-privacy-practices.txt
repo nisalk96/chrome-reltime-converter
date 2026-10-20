@@ -1,9 +1,25 @@
 NK Currency — Chrome Web Store “Privacy practices” answers
+Last synced with package version: 1.0.2
 Paste these into the Privacy practices tab, then Save Draft.
 
 Also complete Dashboard → Account / Settings:
 • Add publisher contact email
 • Verify that email (check inbox for Google’s verification link)
+
+
+═══════════════════════════════════════
+DECLARED IN MANIFEST (v1.0.2) — for your reference
+═══════════════════════════════════════
+
+permissions: ["storage"]
+host_permissions: ["https://api.frankfurter.dev/*"]
+content_scripts.matches: ["<all_urls>"]
+
+NOT requested (do not justify these in the dashboard):
+• scripting
+• activeTab
+• tabs
+• any other optional permissions
 
 
 ═══════════════════════════════════════
@@ -17,6 +33,8 @@ Detects prices on web pages and converts them to the user’s preferred currency
 2) PERMISSION JUSTIFICATIONS (required)
 ═══════════════════════════════════════
 
+Only paste justifications for permissions that appear in the dashboard form for this package.
+
 --- storage ---
 Used only to save the user’s preferences on their device (preferred currency, conversion mode, display options) and to cache exchange rates temporarily so the extension does not repeatedly call the rate API. Settings and cache never leave the user’s browser for advertising or sale.
 
@@ -24,7 +42,9 @@ Used only to save the user’s preferences on their device (preferred currency, 
 Required to fetch public mid-market exchange rates from the Frankfurter API (https://frankfurter.dev / https://api.frankfurter.dev). The extension only requests rate data needed for currency conversion. No browsing history is uploaded to the developer. No other hosts are contacted for conversion.
 
 --- Content scripts / broad site access (matches: <all_urls>) ---
-Required because the product converts prices on arbitrary websites the user visits (shopping, travel, freelance platforms, etc.). Declarative content scripts read visible page text only to find currency amounts and show converted values when the user enables conversion (click-triggered by default, or full realtime if turned on in Settings). No ads, trackers, or unrelated code are injected. Site access is not requested via unused optional permissions; only storage and the Frankfurter host permission are declared in permissions/host_permissions.
+(Use this if the form asks why the extension can read or change data on all websites.)
+
+Required because NK Currency converts prices on arbitrary websites the user visits. Content scripts are declared in the manifest (not injected with the scripting API). They read visible page text only to find currency amounts and show converted values when conversion is enabled. Default mode is click-triggered from the popup; full realtime conversion is optional in Settings. No ads, trackers, or unrelated code are injected.
 
 
 ═══════════════════════════════════════
@@ -42,16 +62,16 @@ This extension does not download or execute remote JavaScript. All extension log
 ═══════════════════════════════════════
 
 In the data collection checkboxes:
-• If asked what user data you collect: typically select that you do NOT collect user data for sale/ads, or only “Personally identifiable information” = none / not collected, unless the form forces a category for locally stored settings.
-• Honest summary: the extension stores preferences and rate cache locally with chrome.storage; it does not send personal data to the developer.
+• Select that you do NOT sell user data / use it for ads.
+• Personally identifiable information: none collected by NK Currency.
+• Honest summary: preferences and rate cache are stored locally with chrome.storage; no personal data is sent to the developer. Rate API calls go from the user’s browser to Frankfurter only.
 
 Certify / check the Developer Program Policies compliance boxes (all that apply), including limited use of user data.
 
 Privacy policy URL (required on many listings):
 https://nisalk.dev/privacy
 
-Full policy source also lives in: store/privacy-policy-draft.md
-(Portfolio page: portfolio-2026/src/app/privacy/page.tsx)
+Keep the live page aligned with store/privacy-policy-draft.md (permissions: storage, content scripts, Frankfurter host only — no scripting or activeTab).
 
 
 ═══════════════════════════════════════
@@ -68,13 +88,14 @@ Full policy source also lives in: store/privacy-policy-draft.md
 QUICK CHECKLIST BEFORE “SUBMIT FOR REVIEW”
 ═══════════════════════════════════════
 
+[ ] Package version 1.0.2 (permissions: storage only + Frankfurter host)
 [ ] Single purpose description pasted
 [ ] storage justification pasted
 [ ] host permission (api.frankfurter.dev) justification pasted
 [ ] Content scripts / all-sites access justified (if the form asks)
-[ ] Do NOT paste justifications for activeTab or scripting — those permissions are not requested
+[ ] No justifications left over for activeTab or scripting
 [ ] Remote code = No (+ short explanation if asked)
 [ ] Data usage certified / policy boxes checked
-[ ] Privacy policy URL filled (must match live site; no mention of unused permissions)
+[ ] Privacy policy URL filled and live page matches current permissions
 [ ] Publisher contact email added AND verified
 [ ] Save Draft

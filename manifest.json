@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "NK Currency",
   "short_name": "NK Currency",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "nisalk",
   "homepage_url": "https://nisalk.dev",
   "description": "Realtime page-wide price detection and conversion to your preferred currency.",

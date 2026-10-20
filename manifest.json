@@ -6,7 +6,7 @@
   "author": "nisalk",
   "homepage_url": "https://nisalk.dev",
   "description": "Realtime page-wide price detection and conversion to your preferred currency.",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["storage", "activeTab"],
   "host_permissions": ["https://api.frankfurter.dev/*"],
   "options_ui": {
     "page": "options/options.html",

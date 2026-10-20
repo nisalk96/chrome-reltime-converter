@@ -1,6 +1,6 @@
 # Privacy Policy — NK Currency
 
-**Last updated:** October 18, 2026  
+**Last updated:** October 20, 2026  
 **Developer:** nisalk ([nisalk.dev](https://nisalk.dev))  
 **Source code:** [github.com/nisalk96/chrome-reltime-converter](https://github.com/nisalk96/chrome-reltime-converter)
 
@@ -39,7 +39,7 @@ Those requests are for rate data only. The response is not executed as remote co
 ## Permissions
 
 - **storage** — save settings and rate cache locally  
-- **activeTab / scripting / content scripts** — read page text to find prices and show conversions when enabled  
+- **Content scripts** — read visible page text to find prices and show conversions when enabled (declarative injection; no `scripting` or `activeTab` permission)  
 - **Host access to api.frankfurter.dev** — fetch exchange rates  
 
 ## Children’s privacy

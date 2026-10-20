@@ -20,14 +20,11 @@ Detects prices on web pages and converts them to the user’s preferred currency
 --- storage ---
 Used only to save the user’s preferences on their device (preferred currency, conversion mode, display options) and to cache exchange rates temporarily so the extension does not repeatedly call the rate API. Settings and cache never leave the user’s browser for advertising or sale.
 
---- activeTab ---
-Used so the user can trigger conversion on the page they are viewing (for example when they click “Convert this page” in the popup). This lets the extension read price text on the active tab only when conversion is requested or enabled, and show converted amounts on that page.
-
---- scripting ---
-Used to run the content script that finds currency amounts in page text and inserts converted values next to (or instead of) those amounts. Scripting is limited to implementing the currency-conversion feature; it does not inject ads, trackers, or unrelated code.
-
 --- Host permission: https://api.frankfurter.dev/* ---
 Required to fetch public mid-market exchange rates from the Frankfurter API (https://frankfurter.dev / https://api.frankfurter.dev). The extension only requests rate data needed for currency conversion. No browsing history is uploaded to the developer. No other hosts are contacted for conversion.
+
+--- Content scripts / broad site access (matches: <all_urls>) ---
+Required because the product converts prices on arbitrary websites the user visits (shopping, travel, freelance platforms, etc.). Declarative content scripts read visible page text only to find currency amounts and show converted values when the user enables conversion (click-triggered by default, or full realtime if turned on in Settings). No ads, trackers, or unrelated code are injected. Site access is not requested via unused optional permissions; only storage and the Frankfurter host permission are declared in permissions/host_permissions.
 
 
 ═══════════════════════════════════════
@@ -73,11 +70,11 @@ QUICK CHECKLIST BEFORE “SUBMIT FOR REVIEW”
 
 [ ] Single purpose description pasted
 [ ] storage justification pasted
-[ ] activeTab justification pasted
-[ ] scripting justification pasted
 [ ] host permission (api.frankfurter.dev) justification pasted
+[ ] Content scripts / all-sites access justified (if the form asks)
+[ ] Do NOT paste justifications for activeTab or scripting — those permissions are not requested
 [ ] Remote code = No (+ short explanation if asked)
 [ ] Data usage certified / policy boxes checked
-[ ] Privacy policy URL filled
+[ ] Privacy policy URL filled (must match live site; no mention of unused permissions)
 [ ] Publisher contact email added AND verified
 [ ] Save Draft

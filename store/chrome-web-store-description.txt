@@ -108,10 +108,10 @@ PERMISSIONS — WHY THEY ARE NEEDED
 ═══════════════════════════════════════
 
 • storage — Save your settings and cache rates on your device.
-• activeTab / scripting / content scripts — Detect prices in page text and show conversions when enabled.
+• Content scripts — Detect prices in page text and show conversions when enabled.
 • Host permission for https://api.frankfurter.dev/* — Fetch public exchange rates only.
 
-NK Currency does not request access to your Google account, camera, microphone, or downloads.
+NK Currency does not request scripting, activeTab, your Google account, camera, microphone, or downloads.
 
 
 ═══════════════════════════════════════

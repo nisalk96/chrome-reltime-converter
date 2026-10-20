@@ -2,11 +2,11 @@
   "manifest_version": 3,
   "name": "NK Currency",
   "short_name": "NK Currency",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "nisalk",
   "homepage_url": "https://nisalk.dev",
   "description": "Realtime page-wide price detection and conversion to your preferred currency.",
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage"],
   "host_permissions": ["https://api.frankfurter.dev/*"],
   "options_ui": {
     "page": "options/options.html",
